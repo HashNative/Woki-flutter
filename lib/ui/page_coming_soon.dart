@@ -37,10 +37,10 @@ ApiListener mApiListener;
                 // width: size.getWidthPx(300),
                 // height: size.getWidthPx(300),
                 // child: Image.asset("assets/icons/icn_coming_soon.png"),
-                child: RaisedButton(
-                      child: Text("Get Data"),
-                      onPressed: WebServices(this.mApiListener).getData,
-            )  
+            //     child: RaisedButton(
+            //           child: Text("Get Data"),
+            //           onPressed: WebServices(this.mApiListener).getData,
+            // )  
                 ),
             
                 )

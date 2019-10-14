@@ -59,22 +59,39 @@ class WebServices {
     }
   }
 
-  Future<List> getData() async {
+ Future<List<Data>> getData() async{
 
-    http.Response response = await http.get(
-      Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-      headers: {
-        "Accept": "application/json"
+      var user = await http.get("https://www.hashnative.com/alloffers");
+      var jsonData = json.decode(user.body);
+
+      List<Data> datas = [];
+
+      for (var d in jsonData){
+
+      Data data = Data(d["id"],d["name"],d["location"],d["offer_item"],d["offer_price"],d["logo"],d["contact"],d["radius"]);
+        datas.add(data);
       }
-      
-    );
-    
-    List data = json.decode(response.body);
-     print(data[1]["title"]);
-    return data;
-
-
+      return datas;
   }
 
 
 }
+
+
+class Data {
+   final String id;
+  final String name;
+  final String location;
+  final String offerItem;
+  final String offerPrice;
+  final String logo;
+  final String contact;
+  final String radius;
+
+  Data(this.id, this.name, this.location, this.offerItem, this.offerPrice, this.logo, this.contact, this.radius);
+
+
+
+
+}
+

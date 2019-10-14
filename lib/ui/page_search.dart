@@ -12,9 +12,12 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+ 
+ApiListener mApiListener;
   Screen size;
   int _selectedIndex = 1;
-  ApiListener mApiListener;
+  List<Data> offerResult;
 
   List<Property> premiumList =  List();
   List<Property> featuredList =  List();
@@ -24,32 +27,37 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-      // List data = WebServices(this.mApiListener).getData as List;
+  
+   WebServices(this.mApiListener).getData().then((result) {
+       
+        if (result!=null) {
+          setState(() {
+    offerResult = result;
+         });
+         for (int i = 0; i < result.length; i++) {
+           print(offerResult[i].name);
+           premiumList
+           ..add(Property(propertyName:offerResult[i].name, propertyLocation:offerResult[i].location, image:"feature_3.jpg", propertyPrice:offerResult[i].offerPrice));
 
-
-    premiumList
-    ..add(Property(propertyName: "Sangari La", propertyLocation:"Galle Face ", image:"feature_1.jpg", propertyPrice:"10,000 LKR"))
-    ..add(Property(propertyName:"Mrino Malle", propertyLocation:"Bambalapitiya ", image:"feature_2.jpg", propertyPrice:"12,500 LKR"))
-    ..add(Property(propertyName:"Thaj Samudra", propertyLocation:"Galle Face ", image:"feature_3.jpg", propertyPrice:"9,850 LKR"))
-    ..add(Property(propertyName:"Adani HighRise", propertyLocation:"Nugegoda ", image:"hall_1.jpg", propertyPrice:"18,500 LKR"))
-    ..add(Property(propertyName:"N.G Tower", propertyLocation:"Town Hall ", image:"hall_2.jpeg", propertyPrice:"7,300 LKR"))
-    ..add(Property(propertyName:"Vishwas CityRise", propertyLocation:"Kollupitiya ", image:"hall_1.jpg", propertyPrice:"5,300 LKR"))
-    ..add(Property(propertyName:"Gift City", propertyLocation:"Bambalapitiya ", image:"hall_2.jpeg", propertyPrice:"6,300 LKR"))
-    ..add(Property(propertyName:"Velone City", propertyLocation:"Wellawatte ", image:"feature_1.jpg", propertyPrice:"7,300 LKR"))
-    ..add(Property(propertyName:"PabelBay", propertyLocation:"Dehiwala ", image:"hall_1.jpg", propertyPrice:"12,000 LKR"))
-    ..add(Property(propertyName:"Sapath Hexa Tower", propertyLocation:"Bambalapitiya", image:"feature_3.jpg", propertyPrice:"5,500 LKR"));
-
-
-
+         }
+         
+        }
+  
+});
+  
+  
   }
 
   @override
   Widget build(BuildContext context) {
+
+        
     size = Screen(MediaQuery.of(context).size);
 
     return Scaffold(
       backgroundColor: backgroundColor,
       body: AnnotatedRegion(
+
         value: SystemUiOverlayStyle(
             statusBarColor: backgroundColor,
             statusBarBrightness: Brightness.dark,
@@ -59,15 +67,21 @@ class _SearchPageState extends State<SearchPage> {
         child: Container(
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[upperPart()],
+              children: <Widget>[
+
+                upperPart()
+
+              ],
             ),
           ),
         ),
       ),
+     
     );
   }
 
   Widget upperPart() {
+  
     return Stack(
       children: <Widget>[
         ClipPath(
@@ -100,8 +114,10 @@ class _SearchPageState extends State<SearchPage> {
                 fontSize: 16.0),
             HorizontalList(
               children: <Widget>[
-                for (int i = 0; i < premiumList.length; i++)
-                  propertyCard(premiumList[i])
+                 for (int i = 0; i < premiumList.length; i++)
+                  propertyCard()
+       
+        
               ],
             ),
             leftAlignText(
@@ -112,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
             HorizontalList(
               children: <Widget>[
                 for (int i = 0; i < premiumList.length; i++)
-                  propertyCard(premiumList.reversed.toList()[i])
+                  propertyCard()
 
               ],
             )
@@ -187,7 +203,8 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Card propertyCard(Property property) {
+  Card propertyCard() {
+   
     return Card(
         elevation: 4.0,
         margin: EdgeInsets.all(8),
@@ -203,31 +220,32 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12.0),
                         topRight: Radius.circular(12.0)),
-                    child: Image.asset('assets/${property.image}',
+                    child: Image.asset('assets/${premiumList[0].image}',
                         fit: BoxFit.fill)),
                 SizedBox(height: size.getWidthPx(8)),
                 leftAlignText(
-                    text: property.propertyName,
+                    text: premiumList[0].propertyName,
                     leftPadding: size.getWidthPx(8),
                     textColor: colorCurve,
                     fontSize: 14.0),
                 leftAlignText(
-                    text: property.propertyLocation,
+                    text: premiumList[0].propertyLocation,
                     leftPadding: size.getWidthPx(8),
                     textColor: Colors.black54,
                     fontSize: 12.0),
                 SizedBox(height: size.getWidthPx(4)),
                 leftAlignText(
-                    text: property.propertyPrice,
+                    text: premiumList[0].propertyPrice,
                     leftPadding: size.getWidthPx(8),
                     textColor: colorCurve,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w800),
               ],
             )));
+ 
   }
 
-  Padding buildChoiceChip(index, chipName) {
+Padding buildChoiceChip(index, chipName) {
     return Padding(
       padding: EdgeInsets.only(left: size.getWidthPx(8)),
       child: ChoiceChip(
@@ -253,3 +271,4 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
+
