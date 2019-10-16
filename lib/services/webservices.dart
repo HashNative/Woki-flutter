@@ -87,6 +87,7 @@ class Data {
   final String logo;
   final String contact;
   final String radius;
+ 
 
   Data(this.id, this.name, this.location, this.offerItem, this.offerPrice, this.logo, this.contact, this.radius);
 

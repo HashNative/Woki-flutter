@@ -5,7 +5,7 @@ import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:flutter_ui_collections/services/webservices.dart';
 import 'package:flutter_ui_collections/services/apilistener.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -261,29 +261,37 @@ ApiListener mApiListener;
   }
  
   Card allOffers(Property property) {
+    
    return Card(
+     
         elevation: 4.0,
-        margin: EdgeInsets.all(8),
+      
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         borderOnForeground: true,
         child: Container(
-           
+          
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,              
-              children: <Widget>[
-                 ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
+              
+             crossAxisAlignment: CrossAxisAlignment.stretch,
+             children: <Widget>[
+               Stack(
+                   alignment: const Alignment(1.0, -1.0),
+                    children: <Widget>[
+                      Container(
+                    width: MediaQuery.of(context).size.width,
+                   
                         child: Image.asset('assets/${property.image}',
                         fit: BoxFit.fill)),
-                      
-                    
+    
+                    Text('Rs.3,600',style: TextStyle(backgroundColor: Colors.orange, color: Colors.white)),
+                    ]
+                ),
+                
                 ExpansionTile(
                   //trailing: Icon(),
                   
                     title: Container(
-                           padding: const EdgeInsets.all(10),
+                          
                            child:  new Row(
                           children: <Widget>[
                             new Expanded(
@@ -318,9 +326,21 @@ ApiListener mApiListener;
                   children: <Widget>[
                     HorizontalList(
                       children: <Widget>[
-                        CircleAvatar(
-                          child: Icon(Icons.call),
-                        ),
+                        FlatButton.icon(
+                          onPressed: 
+                          () async{
+  const url = 'tel:+94777140803';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+                          , 
+                          icon: Icon(Icons.call),
+                          label: Text("Call"),
+                          ),
+                        
                        CircleAvatar(
                           child: Icon(Icons.directions),
                           backgroundColor: Color.fromRGBO(0, 0, 0,1),
@@ -329,7 +349,11 @@ ApiListener mApiListener;
                       ],
                     ),
                      Chip(
-                       label: Text("Book Now"),
+                       label: Text("Book Now",
+          style: TextStyle(color: Colors.white),
+          textDirection: TextDirection.ltr),
+                       backgroundColor: Color.fromRGBO(255, 153, 0, 1),
+                       
                      ),
                      
                   ],
@@ -338,6 +362,8 @@ ApiListener mApiListener;
                  
       
               ],
+            
+            
             ),
             
             ));
