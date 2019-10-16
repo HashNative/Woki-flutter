@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                  accountName: Text("Ilham"), 
                  accountEmail: null,
                  currentAccountPicture: CircleAvatar(
-                   child: Text("i"),
-                 )
-                 ,
+                   child: Text("i"),              
+                 ),
+                 
                ),
              ],
            ),

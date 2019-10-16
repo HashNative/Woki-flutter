@@ -6,6 +6,7 @@ import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:flutter_ui_collections/services/webservices.dart';
 import 'package:flutter_ui_collections/services/apilistener.dart';
 
+
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -13,7 +14,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
 
- 
+
 ApiListener mApiListener;
   Screen size;
   int _selectedIndex = 1;
@@ -36,8 +37,7 @@ ApiListener mApiListener;
          });
          for (int i = 0; i < result.length; i++) {
            print(offerResult[i].name);
-           premiumList
-           ..add(Property(propertyName:offerResult[i].name, propertyLocation:offerResult[i].location, image:"feature_3.jpg", propertyPrice:offerResult[i].offerPrice));
+           premiumList.add(Property(propertyName:offerResult[i].name, propertyLocation:offerResult[i].location, image:"feature_3.jpg", propertyPrice:offerResult[i].offerPrice));
 
          }
          
@@ -66,14 +66,22 @@ ApiListener mApiListener;
             systemNavigationBarColor: backgroundColor),
         child: Container(
           child: SingleChildScrollView(
+            
             child: Column(
               children: <Widget>[
-
-                upperPart()
-
+                 
+                upperPart(),
+                if (offerResult!=null) 
+                  for (int i = 0; i < offerResult.length; i++)
+                     allOffers(premiumList[i]),
+                
               ],
+                
             ),
+          
           ),
+       
+        
         ),
       ),
      
@@ -90,7 +98,7 @@ ApiListener mApiListener;
             height: size.getWidthPx(240),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [colorCurve, colorCurveSecondary],
+                colors: [colorCurve, colorCurve],
               ),
             ),
           ),
@@ -115,23 +123,12 @@ ApiListener mApiListener;
             HorizontalList(
               children: <Widget>[
                  for (int i = 0; i < premiumList.length; i++)
-                  propertyCard()
+                  propertyCard(premiumList[i])
        
         
               ],
             ),
-            leftAlignText(
-                text: "Upcomming Offers",
-                leftPadding: size.getWidthPx(16),
-                textColor: textPrimaryColor,
-                fontSize: 16.0),
-            HorizontalList(
-              children: <Widget>[
-                for (int i = 0; i < premiumList.length; i++)
-                  propertyCard()
-
-              ],
-            )
+           
           ],
         ),
       ],
@@ -146,7 +143,7 @@ ApiListener mApiListener;
             fontWeight: FontWeight.w900,
             color: Colors.white));
   }
-
+  
   Card upperBoxCard() {
     return Card(
         elevation: 4.0,
@@ -201,17 +198,17 @@ ApiListener mApiListener;
                 color: textColor)),
       ),
     );
+   
   }
 
-  Card propertyCard() {
-   
+  Card propertyCard(Property property) {
     return Card(
         elevation: 4.0,
         margin: EdgeInsets.all(8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         borderOnForeground: true,
         child: Container(
-            height: size.getWidthPx(150),
+           
             width: size.getWidthPx(170),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -220,32 +217,24 @@ ApiListener mApiListener;
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12.0),
                         topRight: Radius.circular(12.0)),
-                    child: Image.asset('assets/${premiumList[0].image}',
+                    child: Image.asset('assets/${property.image}',
                         fit: BoxFit.fill)),
                 SizedBox(height: size.getWidthPx(8)),
                 leftAlignText(
-                    text: premiumList[0].propertyName,
+                    text: property.propertyName,
                     leftPadding: size.getWidthPx(8),
                     textColor: colorCurve,
                     fontSize: 14.0),
-                leftAlignText(
-                    text: premiumList[0].propertyLocation,
-                    leftPadding: size.getWidthPx(8),
-                    textColor: Colors.black54,
-                    fontSize: 12.0),
+               
                 SizedBox(height: size.getWidthPx(4)),
-                leftAlignText(
-                    text: premiumList[0].propertyPrice,
-                    leftPadding: size.getWidthPx(8),
-                    textColor: colorCurve,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w800),
+                Chip(                        
+                        label: Text(property.propertyPrice),
+                        ),
               ],
             )));
- 
   }
-
-Padding buildChoiceChip(index, chipName) {
+  
+  Padding buildChoiceChip(index, chipName) {
     return Padding(
       padding: EdgeInsets.only(left: size.getWidthPx(8)),
       child: ChoiceChip(
@@ -270,5 +259,91 @@ Padding buildChoiceChip(index, chipName) {
       ),
     );
   }
+ 
+  Card allOffers(Property property) {
+   return Card(
+        elevation: 4.0,
+        margin: EdgeInsets.all(8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderOnForeground: true,
+        child: Container(
+           
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,              
+              children: <Widget>[
+                 ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5.0),
+                        topRight: Radius.circular(5.0)),
+                        child: Image.asset('assets/${property.image}',
+                        fit: BoxFit.fill)),
+                      
+                    
+                ExpansionTile(
+                  //trailing: Icon(),
+                  
+                    title: Container(
+                           padding: const EdgeInsets.all(10),
+                           child:  new Row(
+                          children: <Widget>[
+                            new Expanded(
+                              child: new Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  leftAlignText(
+                    text: property.propertyName,
+                    leftPadding: size.getWidthPx(8),
+                    textColor: colorCurve,
+                    fontSize: 14.0),
+                SizedBox(height: size.getWidthPx(8)),
+                
+                leftAlignText(
+                    text: property.propertyLocation,
+                    leftPadding: size.getWidthPx(8),
+                    textColor: Colors.black54,
+                    fontSize: 12.0),
+                SizedBox(height: size.getWidthPx(4)),
+                                ],
+                              ),
+                            ),
+                            Chip(                        
+                        label: Text(property.propertyPrice),
+                        ),
+                          ],
+                        ),
+                     
+                         ),
+                        
+                    
+                  children: <Widget>[
+                    HorizontalList(
+                      children: <Widget>[
+                        CircleAvatar(
+                          child: Icon(Icons.call),
+                        ),
+                       CircleAvatar(
+                          child: Icon(Icons.directions),
+                          backgroundColor: Color.fromRGBO(0, 0, 0,1),
+                          foregroundColor: Color.fromRGBO(255, 255, 255, 1),
+                        ) 
+                      ],
+                    ),
+                     Chip(
+                       label: Text("Book Now"),
+                     ),
+                     
+                  ],
+                ), 
+                
+                 
+      
+              ],
+            ),
+            
+            ));
+ 
+ }
+
+
 }
 
